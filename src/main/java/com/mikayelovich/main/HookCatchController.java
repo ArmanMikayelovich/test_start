@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 public class HookCatchController {
 
     private static List<String> list = new ArrayList<>();
-    @RequestMapping(value = "catch", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @RequestMapping(value = "catch", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.GET, RequestMethod.POST })
     private ResponseEntity<List<String>> catchRequest(HttpServletRequest request) {
 
         String s = mapRequestToString(request);
