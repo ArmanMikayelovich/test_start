@@ -1,24 +1,34 @@
 package com.mikayelovich.main;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
 public class HookCatchController {
-    @RequestMapping("catch")
-    private void catchRequest(HttpServletRequest request) {
+
+    private static List<String> list = new ArrayList<>();
+    @RequestMapping(value = "catch", produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<List<String>> catchRequest(HttpServletRequest request) {
+
         String s = mapRequestToString(request);
-        System.out.println("PRINTING REQUEST");
-        System.out.println("++++++++++++++++++++=================++++++++++++++++++++");
-        System.out.println(s);
-        System.out.println("REQUEST PRINTED");
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        list.add("PRINTING REQUEST");
+        list.add("++++++++++++++++++++=================++++++++++++++++++++");
+        list.add(s);
+        list.add("REQUEST PRINTED");
+        list.add("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
     private String mapRequestToString(HttpServletRequest request) {
 
