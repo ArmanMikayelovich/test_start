@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,21 +28,22 @@ public class HookCatchController {
 
     @RequestMapping(value = "catch", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.GET, RequestMethod.POST })
     private ResponseEntity<List<String>> catchRequest(HttpServletRequest request) {
+        if (request.getMethod().equalsIgnoreCase("post")) {
+            list.add("PRINTING REQUEST:   ||   " + LocalDateTime.now());
+            list.add("++++++++++++++++++++=================++++++++++++++++++++");
+            list.add(   mapRequestToString(request));
+            list.add("HEADERS PRINTED, ================ PRINTING PAYLOAD");
+            try {
 
-        String requestHeader = mapRequestToString(request);
-        list.add("PRINTING REQUEST");
-        list.add("++++++++++++++++++++=================++++++++++++++++++++");
-        list.add(requestHeader);
-        list.add("HEADERS PRINTED, ================ PRINTING PAYLOAD");
-        try {
+                list.add(getBody(request));
+            }
+            catch (Exception e) {
+                list.add("Exception occurred");
+            }
+            list.add("REQUEST PRINTED");
+            list.add("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        }
 
-            list.add(getBody(request));
-        }
-        catch (Exception e) {
-            list.add("Exception occurred");
-        }
-        list.add("REQUEST PRINTED");
-        list.add("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     private String mapRequestToString(HttpServletRequest request) {
@@ -49,12 +51,12 @@ public class HookCatchController {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Request Method = [" + request.getMethod() + "], ");
-        sb.append("\n");
+
         sb.append("Request URL Path = [" + request.getRequestURL() + "], ");
-        sb.append("\n");
+
         String headers =
                 Collections.list(request.getHeaderNames()).stream()
-                        .map(headerName -> headerName + " : " + Collections.list(request.getHeaders(headerName)) + "\n")
+                        .map(headerName -> headerName + " : " + Collections.list(request.getHeaders(headerName)) )
                         .collect(Collectors.joining(", "));
 
         if (headers.isEmpty()) {
