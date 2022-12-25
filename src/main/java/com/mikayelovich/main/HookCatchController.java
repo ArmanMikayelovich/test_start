@@ -43,7 +43,9 @@ public class HookCatchController {
             list.add("REQUEST PRINTED");
             list.add("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         }
-
+        if (list.size() > (7 * 7) -1) {
+           list =  list.subList((3 * 7) -1, list.size());
+        }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     private String mapRequestToString(HttpServletRequest request) {
